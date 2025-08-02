@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Para Mabel ❤️</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #ffccd5, #ffe6eb);
+      color: #000;
+      text-align: center;
+      padding: 50px;
+      overflow-x: hidden;
+    }
+
+    h1, h2 {
+      color: #e60026;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #e60026;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #si {
+      background-color: #e60026;
+      color: white;
+    }
+
+    #no {
+      background-color: #111;
+      color: white;
+    }
+
+    #pregunta, #botones, #respuesta, #mensajeFinal, .fotos {
+      display: none;
+      margin-top: 30px;
+    }
+
+    #error {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .corazon {
+      font-size: 40px;
+      color: #e60026;
+      animation: latir 1s infinite;
+    }
+
+    @keyframes latir {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .fotos img {
+      width: 250px;
+      border-radius: 15px;
+      margin: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+
+    .fotos img:hover {
+      transform: scale(1.05);
+    }
+
+    #mensajeFinal {
+      font-size: 20px;
+      color: #c3002f;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hola hermosa ❤️</h1>
+
+  <audio id="musica" src="Weltita.mp3" loop></audio>
+
+  <div id="entradaNombre">
+    <p>Antes de continuar, escribe tu nombre:</p>
+    <input type="text" id="nombre" placeholder="Tu nombre aquí">
+    <br><br>
+    <button onclick="validarNombre()">Continuar</button>
+    <div id="error"></div>
+  </div>
+
+  <div id="pregunta">
+    <h2 id="textoPregunta"></h2>
+  </div>
+
+  <div id="botones">
+    <button id="si" onclick="responder('si')">Sí ❤️</button>
+    <button id="no" onclick="responder('no')">No ❌</button>
+  </div>
+
+  <div id="respuesta"></div>
+  <div id="mensajeFinal">Me gusta tu sonrisa, gracias por tu amor 💖</div>
+
+  <div class="fotos">
+    <img src="lenguita.jpg" alt="Mabel 1">
+    <img src="linda.jpg" alt="Mabel 2">
+    <img src="sonriendo.jpg" alt="Mabel 3">
+  </div>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+    function validarNombre() {
+      const nombre = document.getElementById("nombre").value.trim().toLowerCase();
+      const errorDiv = document.getElementById("error");
+
+      if (nombre === "mabel") {
+        document.getElementById("entradaNombre").style.display = "none";
+        document.getElementById("textoPregunta").textContent = `Mabel, ¿quieres ser mi novia?`;
+        document.getElementById("pregunta").style.display = "block";
+        document.getElementById("botones").style.display = "block";
+
+        // Música
+        const musica = document.getElementById("musica");
+        musica.play().catch(() => {
+          console.log("El navegador bloqueó el autoplay, pero ya interactuó.");
+        });
+
+       // Mostrar mensaje y fotos inmediatamente
+document.getElementById("mensajeFinal").style.display = "block";
+document.querySelector(".fotos").style.display = "block";
+
+      } else {
+        errorDiv.textContent = "❌ Este mensaje es solo para Mabel 😘";
+      }
+    }
+
+    function responder(opcion) {
+  const respuestaDiv = document.getElementById("respuesta");
+  respuestaDiv.innerHTML = "";
+  const fecha = "02/08/2025";
+
+  if (opcion === "si") {
+    // Desactivar los botones solo si dijo que sí
+    document.getElementById("si").disabled = true;
+    document.getElementById("no").disabled = true;
+
+    respuestaDiv.innerHTML = `
+      <div class="corazon">❤️</div>
+      <h2>¡Felicidades!</h2>
+      <p>Ahora formamos la mejor pareja del mundo 💑</p>
+      <p>💖 Nuestro amor comenzó el <strong>${fecha}</strong></p>
+    `;
+    lanzarFuegos();
+  } else {
+    respuestaDiv.innerHTML = `
+      <h2>❌ Error</h2>
+      <p>Respuesta incorrecta. Intenta de nuevo 😢</p>
+    `;
+  }
+
+  respuestaDiv.style.display = "block";
+}
+
+
+    // Fuegos artificiales
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function lanzarFuegos() {
+      const particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push({
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2,
+          radius: Math.random() * 4 + 2,
+          color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+          speedX: (Math.random() - 0.5) * 8,
+          speedY: (Math.random() - 0.5) * 8,
+          life: 100
+        });
+      }
+
+      const interval = setInterval(() => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          p.x += p.speedX;
+          p.y += p.speedY;
+          p.life--;
+        });
+        if (particles.every(p => p.life <= 0)) {
+          clearInterval(interval);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }, 30);
+    }
+  </script>
+</body>
+</html>
